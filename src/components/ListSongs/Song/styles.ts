@@ -1,6 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
+interface ISongStyleProps {
+  isFavorite?: boolean;
+}
+
+export const Container = styled.div<ISongStyleProps>`
   display: flex;
   flex-direction: column;
   max-width: calc(300px - 10px);
@@ -26,8 +30,9 @@ export const Container = styled.div`
     border: 0;
     background: transparent;
 
-    svg {
+    img {
       font-size: 20px;
+      transition: all 0.4s ease;
     }
   }
 `;

@@ -1,8 +1,10 @@
 import { stringify } from 'querystring';
+import { uuid } from 'uuidv4';
 import api from '../../services/api';
 import store from '../../store';
 import * as actions from '../../store/modules/Songs/actions';
 import { ISong } from '../../store/modules/Songs/types';
+import { addToast } from '../ToastController';
 
 export async function getSongs(amountIndex: number, amountSongsPage: number) {
   await api
@@ -39,6 +41,28 @@ export async function getSongs(amountIndex: number, amountSongsPage: number) {
         });
       });
       actions.setSongs([...songs, ...newArray]);
+      const id = uuid();
+      if (newArray.length > 0) {
+        addToast({
+          id,
+          title: 'Busca relizada com sucesso!',
+          type: 'success',
+        });
+      } else {
+        addToast({
+          id,
+          title: 'Não foi encontrado nenhum registro!',
+          type: 'error',
+        });
+      }
+    })
+    .catch((response) => {
+      const id = uuid();
+      return addToast({
+        id,
+        title: 'Houve uma falha ao relizar a busca!',
+        type: 'error',
+      });
     });
 }
 
@@ -83,6 +107,28 @@ export async function getSeacrhSong(
         });
       });
       actions.setSongs([...songs, ...newArray]);
+      const id = uuid();
+      if (newArray.length > 0) {
+        addToast({
+          id,
+          title: 'Busca relizada com sucesso!',
+          type: 'success',
+        });
+      } else {
+        addToast({
+          id,
+          title: 'Não foi encontrado nenhum registro!',
+          type: 'error',
+        });
+      }
+    })
+    .catch((response) => {
+      const id = uuid();
+      return addToast({
+        id,
+        title: 'Houve uma falha ao relizar a busca!',
+        type: 'error',
+      });
     });
 }
 
@@ -94,8 +140,6 @@ export async function addFavoriteSong(id: number, favorites?: boolean) {
     ? songsFavorites.find((i) => Number(i.id) === id && i)
     : songs.find((i) => Number(i.id) === id && i);
 
-  console.log(musicExists);
-
   if (musicExists?.isFavorite) {
     const filterArrFavorite = songsFavorites.filter(
       (i) => Number(i.id) !== id && i,
@@ -106,6 +150,12 @@ export async function addFavoriteSong(id: number, favorites?: boolean) {
     actions.setSongs(songsFav);
     actions.setSongsFavorites(filterArrFavorite);
     localStorage.setItem('SongsFavorites:', JSON.stringify(filterArrFavorite));
+    const idUuid = uuid();
+    addToast({
+      id: idUuid,
+      title: 'Música removida da lista de Favoritos com sucesso!!',
+      type: 'success',
+    });
   } else {
     const filterArrFavorite = songs.filter((i) => Number(i.id) === id && i);
     // @ts-ignore
@@ -121,5 +171,41 @@ export async function addFavoriteSong(id: number, favorites?: boolean) {
       'SongsFavorites:',
       JSON.stringify([...songsFavorites, ...newArrFavorite]),
     );
+    const idUuid = uuid();
+    addToast({
+      id: idUuid,
+      title: 'Música adicionada na lista de Favoritos com sucesso!!',
+      type: 'success',
+    });
+  }
+}
+
+export async function getSearchSongFavorites(searchText: string) {
+  const dataFavoritesStorage = localStorage.getItem('SongsFavorites:');
+  let dataParseStorage: ISong[] = [];
+  if (dataFavoritesStorage) {
+    dataParseStorage = JSON.parse(dataFavoritesStorage);
+  }
+
+  const newArr = dataParseStorage.filter(
+    (song) =>
+      song.artist.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      song.title.toLowerCase().includes(searchText.toLowerCase()),
+  );
+
+  actions.setSongsFavorites(newArr);
+  const id = uuid();
+  if (newArr.length > 0) {
+    addToast({
+      id,
+      title: 'Busca relizada com sucesso!',
+      type: 'success',
+    });
+  } else {
+    addToast({
+      id,
+      title: 'Não foi encontrado nenhum registro!',
+      type: 'error',
+    });
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiSearch } from 'react-icons/fi';
+import { FiHelpCircle, FiSearch } from 'react-icons/fi';
 
 import * as actions from '../../store/modules/Songs/actions';
 
@@ -24,6 +24,10 @@ const SearchMenu: React.FC<IMenuSearchProps> = ({ miniMenu, setMiniMenu }) => (
     />
     <label htmlFor="">Pesquisar..</label>
     <FiSearch />
+    <div>
+      <FiHelpCircle size={14} />
+      <span>Pressione a tecla &quot;Enter&quot; para realizar a pesquisa </span>
+    </div>
   </Container>
 );
 

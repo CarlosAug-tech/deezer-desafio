@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaStar, FaRegStar } from 'react-icons/fa';
 import { FiStar } from 'react-icons/fi';
 import { ISong } from '../../../store/modules/Songs/types';
 
@@ -10,12 +11,16 @@ interface ISongProps {
 }
 
 const Song: React.FC<ISongProps> = ({ song, handleFavorite }) => (
-  <Container>
+  <Container isFavorite={song.isFavorite}>
     <img src={song.album.cover_medium} alt="" />
     <strong>{song.title}</strong>
     <audio src={song.preview} controls />
     <button type="button" onClick={() => handleFavorite(song.id)}>
-      <FiStar color={song.isFavorite ? 'red' : '#333'} />
+      {song.isFavorite ? (
+        <FaStar size={20} color="#FFD700" />
+      ) : (
+        <FaRegStar size={20} color="#333" />
+      )}
     </button>
   </Container>
 );

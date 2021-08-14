@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ISearchSong, ISong } from '../../store/modules/Songs/types';
@@ -10,6 +10,8 @@ import * as controllerSongs from '../../controllers/SongsController';
 import { Container, Content } from './styles';
 import Song from './Song';
 import Loading from '../Loading';
+import { IToast } from '../../store/modules/Toasts/types';
+import Toast from '../Toast';
 
 interface IListSongsProps {
   favorites?: boolean;
@@ -24,6 +26,9 @@ const ListSongs: React.FC<IListSongsProps> = ({ favorites }) => {
   );
   const dataSongsFavorites = useSelector<AppState, ISong[]>(
     (state) => state.songs.songsFavorites,
+  );
+  const toasts = useSelector<AppState, IToast[]>(
+    (state) => state.toasts.toasts,
   );
 
   const [loading, setLoading] = useState(false);
@@ -45,17 +50,31 @@ const ListSongs: React.FC<IListSongsProps> = ({ favorites }) => {
   }, []);
 
   useEffect(() => {
+    if (favorites && search.searchText === '') {
+      const data = localStorage.getItem('SongsFavorites:');
+      if (data) {
+        actions.setSongsFavorites(JSON.parse(data));
+      }
+    }
+  }, [search.searchText]);
+
+  useEffect(() => {
     setLoading(true);
-    if (search.searchText === '') {
-      setTimeout(() => {
-        controllerSongs.getSongs(amountIndex, amountSongsPage);
-        setLoading(false);
-      }, 3000);
+    if (!favorites) {
+      if (search.searchText === '') {
+        setTimeout(() => {
+          controllerSongs.getSongs(amountIndex, amountSongsPage);
+          setLoading(false);
+        }, 3000);
+      } else {
+        setTimeout(() => {
+          controllerSongs.getSeacrhSong(search.searchText, amountIndexSearch);
+          setLoading(false);
+        }, 3000);
+      }
     } else {
-      setTimeout(() => {
-        controllerSongs.getSeacrhSong(search.searchText, amountIndexSearch);
-        setLoading(false);
-      }, 3000);
+      controllerSongs.getSearchSongFavorites(search.searchText);
+      setLoading(false);
     }
   }, [amountIndex, search.searchText, amountIndexSearch]);
 
@@ -85,53 +104,60 @@ const ListSongs: React.FC<IListSongsProps> = ({ favorites }) => {
 
   const handleFavorite = (id: number) => {
     controllerSongs.addFavoriteSong(id, favorites);
-    console.log('entrou');
   };
 
   return (
-    <Container>
-      <Content>
-        {favorites ? (
-          <>
-            {dataSongsFavorites.length === 0 ? (
-              <Loading loading={loading} />
-            ) : (
-              <>
-                {dataSongsFavorites.length > 0 &&
-                  dataSongsFavorites.map((song) => (
-                    <Song
-                      key={song.id}
-                      song={song}
-                      handleFavorite={handleFavorite}
-                    />
-                  ))}
-              </>
-            )}
-          </>
-        ) : (
-          <>
-            {dataSongs.length === 0 ? (
-              <Loading loading={loading} />
-            ) : (
-              <>
-                {dataSongs.length > 0 &&
-                  dataSongs.map((song) => (
-                    <Song
-                      key={song.id}
-                      song={song}
-                      handleFavorite={handleFavorite}
-                    />
-                  ))}
-                {((amountIndex >= amountSongsPage && loading) ||
-                  (amountIndexSearch >= amountSongsPageSearch && loading)) && (
-                  <Loading loading={loading} />
-                )}
-              </>
-            )}
-          </>
-        )}
-      </Content>
-    </Container>
+    <>
+      <Container>
+        <Content>
+          {favorites ? (
+            <>
+              {dataSongsFavorites.length === 0 ? (
+                <>
+                  {loading ? (
+                    <Loading loading={loading} />
+                  ) : (
+                    <span>Não foi encontrado nenhum registro!</span>
+                  )}
+                </>
+              ) : (
+                <>
+                  {dataSongsFavorites.length > 0 &&
+                    dataSongsFavorites.map((song) => (
+                      <Song
+                        key={song.id}
+                        song={song}
+                        handleFavorite={handleFavorite}
+                      />
+                    ))}
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              {dataSongs.length === 0 ? (
+                <>{loading && <Loading loading={loading} />}</>
+              ) : (
+                <>
+                  {dataSongs.length > 0 &&
+                    dataSongs.map((song) => (
+                      <Song
+                        key={song.id}
+                        song={song}
+                        handleFavorite={handleFavorite}
+                      />
+                    ))}
+                  {((amountIndex >= amountSongsPage && loading) ||
+                    (amountIndexSearch >= amountSongsPageSearch &&
+                      loading)) && <Loading loading={loading} />}
+                </>
+              )}
+            </>
+          )}
+        </Content>
+      </Container>
+      {toasts && <Toast toasts={toasts} />}
+    </>
   );
 };
 
