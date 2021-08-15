@@ -9,7 +9,7 @@ export const Container = styled.div<ILoadingStyleProps>`
   align-items: center;
   justify-content: center;
   width: 100%;
-  /* padding: 10px 0; */
+  grid-column: span 4;
 
   svg {
     ${(props) =>
@@ -26,5 +26,17 @@ export const Container = styled.div<ILoadingStyleProps>`
     to {
       transform: rotate(360deg);
     }
+  }
+
+  @media (max-width: 1305px) {
+    grid-column: span 3;
+  }
+
+  @media (max-width: 1004px) {
+    grid-column: span 2;
+  }
+
+  @media (max-width: 704px) {
+    grid-column: span 1;
   }
 `;

@@ -18,7 +18,7 @@ export const Container = styled.header<IMenuStyleProps>`
   transition: max-width 0.4s ease;
 
   & ~ main {
-    margin-left: ${(props) => (props.miniMenu ? '78px' : '250px')};
+    margin-left: 78px;
   }
 `;
 

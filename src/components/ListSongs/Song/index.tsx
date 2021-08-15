@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import { FiStar } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import { ISong } from '../../../store/modules/Songs/types';
 
 import { Container } from './styles';
@@ -12,7 +13,21 @@ interface ISongProps {
 
 const Song: React.FC<ISongProps> = ({ song, handleFavorite }) => (
   <Container isFavorite={song.isFavorite}>
-    <img src={song.album.cover_medium} alt="" />
+    <div>
+      <img src={song.album.cover_medium} alt="" />
+      <div>
+        <span>
+          <b>Artista:</b> {song.artist.name}{' '}
+        </span>
+        <small>
+          Duração:{' '}
+          {new Date(Number(song.duration) * 1000).toISOString().substr(11, 8)}
+        </small>
+        <a href={`${song.link}`} target="_blank" rel="noreferrer">
+          Acesse a música completa
+        </a>
+      </div>
+    </div>
     <strong>{song.title}</strong>
     <audio src={song.preview} controls />
     <button type="button" onClick={() => handleFavorite(song.id)}>
