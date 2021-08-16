@@ -49,7 +49,7 @@ export async function getSongs(
       if (newArray.length > 0) {
         addToast({
           id,
-          title: 'Busca relizada com sucesso!',
+          title: 'Busca realizada com sucesso!',
           type: 'success',
         });
       } else {
@@ -117,7 +117,7 @@ export async function getSeacrhSong(
       if (newArray.length > 0) {
         addToast({
           id,
-          title: 'Busca relizada com sucesso!',
+          title: 'Busca realizada com sucesso!',
           type: 'success',
         });
       } else {
@@ -204,7 +204,7 @@ export async function getSearchSongFavorites(searchText: string) {
   if (newArr.length > 0) {
     addToast({
       id,
-      title: 'Busca relizada com sucesso!',
+      title: 'Busca realizada com sucesso!',
       type: 'success',
     });
   } else {

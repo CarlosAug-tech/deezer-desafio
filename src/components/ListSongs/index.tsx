@@ -7,11 +7,12 @@ import { AppState } from '../../store/storeTypes';
 import * as actions from '../../store/modules/Songs/actions';
 import * as controllerSongs from '../../controllers/SongsController';
 
-import { Container, Content } from './styles';
 import Song from './Song';
 import Loading from '../Loading';
 import { IToast } from '../../store/modules/Toasts/types';
 import Toast from '../Toast';
+
+import { Container, Content } from './styles';
 
 interface IListSongsProps {
   favorites?: boolean;
