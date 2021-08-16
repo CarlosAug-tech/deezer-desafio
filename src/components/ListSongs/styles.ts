@@ -6,7 +6,7 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   grid-gap: 10px;
   max-width: 1200px;
   width: 100%;
