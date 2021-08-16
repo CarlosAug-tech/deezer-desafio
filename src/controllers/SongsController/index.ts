@@ -1,4 +1,3 @@
-import { stringify } from 'querystring';
 import { uuid } from 'uuidv4';
 import api from '../../services/api';
 import store from '../../store';
@@ -6,7 +5,11 @@ import * as actions from '../../store/modules/Songs/actions';
 import { ISong } from '../../store/modules/Songs/types';
 import { addToast } from '../ToastController';
 
-export async function getSongs(amountIndex: number, amountSongsPage: number) {
+export async function getSongs(
+  amountIndex: number,
+  amountSongsPage: number,
+  setLoading: Function,
+) {
   await api
     .get(`/chart/0/tracks?index=${amountIndex}&limit=${amountSongsPage}`)
     .then((response) => {
@@ -41,6 +44,7 @@ export async function getSongs(amountIndex: number, amountSongsPage: number) {
         });
       });
       actions.setSongs([...songs, ...newArray]);
+      setLoading(false);
       const id = uuid();
       if (newArray.length > 0) {
         addToast({
@@ -69,6 +73,7 @@ export async function getSongs(amountIndex: number, amountSongsPage: number) {
 export async function getSeacrhSong(
   searchText: string,
   amountIndexSearch: number,
+  setLoading: Function,
 ) {
   if (amountIndexSearch === 0) {
     await actions.cleanListSongs();
@@ -107,6 +112,7 @@ export async function getSeacrhSong(
         });
       });
       actions.setSongs([...songs, ...newArray]);
+      setLoading(false);
       const id = uuid();
       if (newArray.length > 0) {
         addToast({

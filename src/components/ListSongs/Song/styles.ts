@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 interface ISongStyleProps {
   isFavorite?: boolean;
@@ -46,10 +46,32 @@ export const Container = styled.div<ISongStyleProps>`
 
       > a {
         align-self: flex-end;
+        margin-right: 3px;
         font-size: 12px;
         color: #fff;
         bottom: 3px;
         position: absolute;
+        transition: color 0.4s ease;
+
+        &:hover {
+          color: #d9d9d9;
+        }
+
+        &::before {
+          content: '';
+          width: 0;
+          height: 2px;
+          bottom: 0;
+          left: 50%;
+          position: absolute;
+          transform: translateX(-50%);
+          background: #d9d9d9;
+          transition: all 0.4s ease;
+        }
+
+        &:hover::before {
+          width: 100%;
+        }
       }
     }
   }

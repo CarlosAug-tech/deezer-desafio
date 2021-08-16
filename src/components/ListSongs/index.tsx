@@ -63,13 +63,15 @@ const ListSongs: React.FC<IListSongsProps> = ({ favorites }) => {
     if (!favorites) {
       if (search.searchText === '') {
         setTimeout(() => {
-          controllerSongs.getSongs(amountIndex, amountSongsPage);
-          setLoading(false);
+          controllerSongs.getSongs(amountIndex, amountSongsPage, setLoading);
         }, 3000);
       } else {
         setTimeout(() => {
-          controllerSongs.getSeacrhSong(search.searchText, amountIndexSearch);
-          setLoading(false);
+          controllerSongs.getSeacrhSong(
+            search.searchText,
+            amountIndexSearch,
+            setLoading,
+          );
         }, 3000);
       }
     } else {
@@ -117,7 +119,7 @@ const ListSongs: React.FC<IListSongsProps> = ({ favorites }) => {
                   {loading ? (
                     <Loading loading={loading} />
                   ) : (
-                    <span>Não foi encontrado nenhum registro!</span>
+                    <h3>Não foi encontrado nenhum registro!</h3>
                   )}
                 </>
               ) : (
@@ -136,7 +138,13 @@ const ListSongs: React.FC<IListSongsProps> = ({ favorites }) => {
           ) : (
             <>
               {dataSongs.length === 0 ? (
-                <>{loading && <Loading loading={loading} />}</>
+                <>
+                  {loading ? (
+                    <Loading loading={loading} />
+                  ) : (
+                    <h3>Não foi encontrado nenhum registro!</h3>
+                  )}
+                </>
               ) : (
                 <>
                   {dataSongs.length > 0 &&

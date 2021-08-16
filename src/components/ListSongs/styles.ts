@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
@@ -12,6 +12,11 @@ export const Content = styled.div`
   width: 100%;
   padding-bottom: 20px;
   margin: 0 auto;
+
+  > h3 {
+    color: #c53030;
+    text-align: center;
+  }
 
   @media (max-width: 1305px) {
     max-width: unset;

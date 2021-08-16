@@ -1,7 +1,5 @@
 import React from 'react';
 import { FaStar, FaRegStar } from 'react-icons/fa';
-import { FiStar } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
 import { ISong } from '../../../store/modules/Songs/types';
 
 import { Container } from './styles';
